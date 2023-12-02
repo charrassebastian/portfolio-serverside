@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-serverside
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio-serverside
+  template:
+    metadata:
+      labels:
+        app: portfolio-serverside
+    spec:
+      containers:
+      - name: portfolio-serverside
+        image: sebastiancharras/portfolio-serverside
+        ports:
+        - containerPort: 80
