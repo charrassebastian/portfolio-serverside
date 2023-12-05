@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: portfolio-db
+spec:
+  selector:
+    matchLabels:
+      app: portfolio-db
+  serviceName: portfolio-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: portfolio-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: portfolio-db
+        image: mysql:latest
+        ports:
+        - containerPort: 3306
+          name: portfolio-db
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: "portfolio"
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: portfolio-volume
+  volumeClaimTemplates:
+  - metadata:
+      name: portfolio-volume
+    spec:
+      storageClassName: sc-local
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
